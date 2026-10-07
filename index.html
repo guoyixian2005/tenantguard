@@ -417,8 +417,8 @@
     window.addEventListener('message', (ev) => {
       try {
         const data = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data;
-        if (data && (data.post_message_name === 'sale' || data.type === 'gumroad:sale' || data.event === 'sale')) {
-          triggerPaymentSuccess();
+        if (data && (data.post_message_name === 'sale' || data.type === 'gumroad:sale' || data.event === 'sale' || data.event === 'purchase')) {
+          window.location.href = "https://www.comilla.world/?status=success";
         }
       } catch (e) {}
     });
