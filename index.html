@@ -19,7 +19,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://gumroad.com/js/gumroad.js"></script>
   
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -42,6 +41,27 @@
   <!-- Payment Status Banner (Auto-injected on successful checkout return) -->
   <div id="stripe-success-banner" class="hidden bg-emerald-950 border-b border-emerald-500/40 text-emerald-300 text-xs py-2.5 px-4 text-center sticky top-0 z-50 backdrop-blur">
     <span class="font-bold text-white">🎉 Payment Confirmed!</span> Your verification scan is ready. Drop your tenant document into the scanner below.
+  </div>
+
+  <!-- Checkout In-Progress Floating Modal -->
+  <div id="checkout-pending-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-teal-500/40 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-center space-y-4">
+      <div class="w-14 h-14 rounded-2xl bg-teal-500/20 border border-teal-500/40 text-teal-400 flex items-center justify-center mx-auto animate-pulse">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      </div>
+      <h3 class="text-xl font-bold text-white">Checkout in Progress</h3>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Please complete your verification payment in the secure Gumroad checkout window. Once completed, this page will automatically activate your audit scanner.
+      </p>
+      <div class="pt-2 flex flex-col gap-2.5">
+        <button onclick="triggerPaymentSuccess()" class="w-full py-3 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold text-xs transition shadow-lg shadow-teal-500/20 cursor-pointer">
+          ✓ I've Completed Payment (Start Scan Now)
+        </button>
+        <button onclick="document.getElementById('checkout-pending-modal').classList.add('hidden')" class="text-xs text-slate-500 hover:text-slate-400 transition py-1">
+          Close notice
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Beta Banner -->
@@ -67,7 +87,7 @@
         <a href="#faq" class="hover:text-white transition">FAQ</a>
       </div>
       <div>
-        <a href="https://1943802037103.gumroad.com/l/pycljg" data-gumroad-single-product="true" class="gumroad-button px-4 py-2 text-sm font-semibold rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 transition shadow-sm flex items-center gap-1.5 cursor-pointer">
+        <a href="https://1943802037103.gumroad.com/l/pycljg" onclick="openSecureCheckout(event, 'single')" class="px-4 py-2 text-sm font-semibold rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 transition shadow-sm flex items-center gap-1.5 cursor-pointer">
           <span>Verify a Document ($9.99)</span>
         </a>
       </div>
@@ -307,7 +327,7 @@
               <li class="flex items-center gap-2">✓ Downloadable Landlord Decision PDF</li>
             </ul>
           </div>
-          <a href="https://1943802037103.gumroad.com/l/pycljg" data-gumroad-single-product="true" class="gumroad-button w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition block text-center cursor-pointer">
+          <a href="https://1943802037103.gumroad.com/l/pycljg" onclick="openSecureCheckout(event, 'single')" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition block text-center cursor-pointer">
             Buy 1 Document Audit ($9.99)
           </a>
         </div>
@@ -330,7 +350,7 @@
               <li class="flex items-center gap-2">✓ Priority analysis queue</li>
             </ul>
           </div>
-          <a href="https://1943802037103.gumroad.com/l/pycljg" data-gumroad-single-product="true" class="gumroad-button w-full py-3 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold text-xs transition shadow-lg shadow-teal-500/20 block text-center cursor-pointer">
+          <a href="https://1943802037103.gumroad.com/l/pycljg" onclick="openSecureCheckout(event, 'pack3')" class="w-full py-3 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold text-xs transition shadow-lg shadow-teal-500/20 block text-center cursor-pointer">
             Get 3-Pack & Save $10 ($19.99)
           </a>
         </div>
@@ -350,7 +370,7 @@
               <li class="flex items-center gap-2">✓ Cancel anytime with 1 click</li>
             </ul>
           </div>
-          <a href="https://1943802037103.gumroad.com/l/pycljg" data-gumroad-single-product="true" class="gumroad-button w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition block text-center cursor-pointer">
+          <a href="https://1943802037103.gumroad.com/l/pycljg" onclick="openSecureCheckout(event, 'pro')" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition block text-center cursor-pointer">
             Subscribe Monthly ($29/mo)
           </a>
         </div>
@@ -397,38 +417,81 @@
 
   <!-- Script for Interactive Demo, Live API Upload, Stripe Checkout & Sample Generator -->
   <script>
+    const GUMROAD_CHECKOUT_URL = "https://1943802037103.gumroad.com/l/pycljg";
+
     function triggerPaymentSuccess() {
+      sessionStorage.setItem('tg_paid', 'true');
       const banner = document.getElementById('stripe-success-banner');
       if (banner) {
         banner.classList.remove('hidden');
         document.getElementById('interactive-demo').scrollIntoView({ behavior: 'smooth' });
       }
+      const pendingModal = document.getElementById('checkout-pending-modal');
+      if (pendingModal) pendingModal.classList.add('hidden');
     }
 
-    // 1. Detect return from Gumroad redirect (with ?status=success, sale_id, or order number)
+    // Centered, focused checkout window with active return monitoring
+    function openSecureCheckout(e, plan) {
+      if (e) e.preventDefault();
+      
+      const w = 540, h = 700;
+      const left = Math.max(0, (window.screen.width / 2) - (w / 2));
+      const top = Math.max(0, (window.screen.height / 2) - (h / 2));
+      
+      const popup = window.open(
+        GUMROAD_CHECKOUT_URL,
+        'TenantGuard_Checkout',
+        `width=${w},height=${h},top=${top},left=${left},scrollbars=yes,resizable=yes`
+      );
+
+      const pendingModal = document.getElementById('checkout-pending-modal');
+      if (pendingModal) pendingModal.classList.remove('hidden');
+
+      if (popup) {
+        // Monitor checkout window: automatically activates scanner when closed!
+        const timer = setInterval(() => {
+          if (popup.closed) {
+            clearInterval(timer);
+            triggerPaymentSuccess();
+          }
+        }, 800);
+      } else {
+        // Fallback for pop-up blockers: standard navigate
+        window.location.href = GUMROAD_CHECKOUT_URL;
+      }
+    }
+
+    function startCheckout(plan) {
+      openSecureCheckout(null, plan);
+    }
+
+    // If popup was redirected to this page with ?status=success, notify opener and close
+    if (window.opener && (window.location.search.includes('status=success') || window.location.search.includes('sale_id'))) {
+      try {
+        if (window.opener.triggerPaymentSuccess) {
+          window.opener.triggerPaymentSuccess();
+          window.close();
+        }
+      } catch (err) {}
+    }
+
+    // Auto-detect return or persistent unlocked state
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('status') === 'success' || urlParams.has('sale_id') || urlParams.has('order_number') || urlParams.has('purchase') || urlParams.get('success') === 'true') {
+      if (urlParams.get('status') === 'success' || urlParams.has('sale_id') || urlParams.has('order_number') || sessionStorage.getItem('tg_paid') === 'true') {
         triggerPaymentSuccess();
       }
     });
 
-    // 2. Real-time postMessage listener from Gumroad Overlay (fires immediately upon checkout completion)
+    // Real-time postMessage listener
     window.addEventListener('message', (ev) => {
       try {
         const data = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data;
         if (data && (data.post_message_name === 'sale' || data.type === 'gumroad:sale' || data.event === 'sale' || data.event === 'purchase')) {
-          window.location.href = "https://www.comilla.world/?status=success";
+          triggerPaymentSuccess();
         }
       } catch (e) {}
     });
-
-    // Start Gumroad Checkout (fallback handler)
-    const GUMROAD_CHECKOUT_URL = "https://1943802037103.gumroad.com/l/pycljg";
-
-    function startCheckout(plan) {
-      window.location.href = GUMROAD_CHECKOUT_URL;
-    }
 
     const dropzone = document.getElementById('dropzone');
     const fileInput = document.getElementById('file-input');
