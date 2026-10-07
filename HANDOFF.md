@@ -11,7 +11,8 @@
 - **GitHub 仓库**：`https://github.com/guoyixian2005/tenantguard`
 - **托管平台**：Vercel Serverless (Global Edge CDN)
 - **域名提供商**：NameSilo (`comilla.world`)
-- **支付通道**：Stripe Checkout（绑定美国花旗银行 Payoneer 账户提现）
+- **支付通道**：Gumroad Checkout（支持信用卡 / PayPal / Apple Pay，资金提现至 PayPal 结汇回国）+ Stripe Serverless 备用接口
+- **Gumroad 结账链接**：`https://1943802037103.gumroad.com/l/pycljg`
 
 ## 2. 技术栈 / 架构
 
@@ -33,7 +34,7 @@
 
 ## 3. 当前状态
 
-阶段：**MVP 全流程 100% 闭环落地（前端 + 算法 API + 域名上线 + Stripe 支付对接入账 + 提现账户绑定）** (100%)
+阶段：**MVP 全流程 100% 闭环落地（前端 + 算法 API + 独立域名 HTTPS + Gumroad 美元收款闭环 + PayPal 提现）** (100%)
 
 ## 4. 关键资产与凭据配置
 
@@ -67,6 +68,7 @@
 
 ## 6. 下一步运营与获客行动建议
 
-1. **Stripe 结账链路实测**：在 `comilla.world` 点击 `$9.99` 按钮，使用 Stripe 官方测试卡 `4242 4242 4242 4242` 完成一笔模拟支付测试。
-2. **Reddit 社群发帖引流**：待 Reddit 账号养好积累 10~20 点 Karma 后，在美东时间白天（北京时间晚 20:30~22:30）前往 `r/Landlord` 发布 `docs/05_` 中的干货长文。
-3. **首批种子客户转化**：根据 `docs/05_` 评论区话术引导房东进站使用，捕获首批付费转化。
+1. **终端执行推送上线**：在终端运行 `unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY && git push` 将最新 Gumroad 链接部署至 Vercel 生产环境。
+2. **Gumroad 提现验证**：在 Gumroad 个人控制台 `Settings ➔ Payments` 确认已绑定 PayPal 收款邮箱。
+3. **Reddit 社群发帖引流**：在美东时间白天（北京时间晚 20:30~22:30）前往 `r/Landlord` 发布 `docs/05_Reddit冷启动获客长文与发帖指南.md` 中的干货长文。
+4. **首批种子客户转化**：根据 `docs/05_` 评论区话术引导房东进站使用，捕获首批付费转化。
